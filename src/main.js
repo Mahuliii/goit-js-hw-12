@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const { images, total } = await fetchImages(searchTerm, currentPage);
       totalHits = total;
-      displayImages(images, gallery);
 
       loader.style.display = 'none';
       if (images.length > 0) {
@@ -43,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
           loadMoreBtn.style.display = 'block';
         }
       }
+      smoothScrollBy(getCardHeight(gallery) * 2);
     } catch (error) {
       loader.style.display = 'none';
       showAlert('Failed to fetch images');
@@ -66,9 +66,23 @@ document.addEventListener('DOMContentLoaded', () => {
         loadMoreBtn.style.display = 'none';
         endMessage.style.display = 'block';
       }
+      smoothScrollBy(getCardHeight(gallery) * 2);
     } catch (error) {
       loader.style.display = 'none';
       showAlert('Failed to fetch images');
     }
   });
 });
+function getCardHeight(gallery) {
+  const card = gallery.querySelector('.card');
+  if (card) {
+    return card.getBoundingClientRect().height;
+  }
+  return 0;
+}
+function smoothScrollBy(distance) {
+  window.scrollBy({
+    top: distance,
+    behavior: 'smooth',
+  });
+}

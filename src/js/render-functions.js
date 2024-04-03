@@ -20,16 +20,20 @@ export function displayImages(images) {
     info.classList.add('card-info');
 
     const likes = document.createElement('p');
-    likes.textContent = `Likes: ${image.likes}`;
+    likes.textContent = `Likes: 
+    ${image.likes}`;
 
     const views = document.createElement('p');
-    views.textContent = `Views: ${image.views}`;
+    views.textContent = `Views: 
+    ${image.views}`;
 
     const comments = document.createElement('p');
-    comments.textContent = `Comments: ${image.comments}`;
+    comments.textContent = `Comments: 
+    ${image.comments}`;
 
     const downloads = document.createElement('p');
-    downloads.textContent = `Downloads: ${image.downloads}`;
+    downloads.textContent = `Downloads: 
+    ${image.downloads}`;
 
     info.appendChild(likes);
     info.appendChild(views);

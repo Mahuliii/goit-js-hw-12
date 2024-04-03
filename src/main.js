@@ -14,6 +14,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const endMessage = document.getElementById('end-message');
   loader.style.display = 'none';
   loadMoreBtn.style.display = 'none';
+  function getCardHeight(gallery) {
+    const card = gallery.querySelector('.card');
+    if (card) {
+      return card.getBoundingClientRect().height;
+    }
+    return 0;
+  }
+  function smoothScrollBy(distance) {
+    window.scrollBy({
+      top: distance,
+      behavior: 'smooth',
+    });
+  }
 
   searchInput.addEventListener('input', event => {
     searchTerm = event.target.value.trim();
@@ -73,16 +86,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-function getCardHeight(gallery) {
-  const card = gallery.querySelector('.card');
-  if (card) {
-    return card.getBoundingClientRect().height;
-  }
-  return 0;
-}
-function smoothScrollBy(distance) {
-  window.scrollBy({
-    top: distance,
-    behavior: 'smooth',
-  });
-}

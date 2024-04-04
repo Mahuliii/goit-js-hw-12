@@ -12,21 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const loader = document.querySelector('.loader');
   const loadMoreBtn = document.getElementById('load-more-btn');
   const endMessage = document.getElementById('end-message');
+
   loader.style.display = 'none';
   loadMoreBtn.style.display = 'none';
-  function getCardHeight(gallery) {
-    const card = gallery.querySelector('.card');
-    if (card) {
-      return card.getBoundingClientRect().height;
-    }
-    return 0;
-  }
-  function smoothScrollBy(distance) {
-    window.scrollBy({
-      top: distance,
-      behavior: 'smooth',
-    });
-  }
 
   searchInput.addEventListener('input', event => {
     searchTerm = event.target.value.trim();
@@ -51,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
       loader.style.display = 'none';
       if (images.length > 0) {
         displayImages(images, gallery);
+
         if (images.length === 15) {
           loadMoreBtn.style.display = 'block';
         }
@@ -86,3 +75,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+function getCardHeight(gallery) {
+  const card = gallery.querySelector('.card');
+  if (card) {
+    return card.getBoundingClientRect().height;
+  }
+  return 0;
+}
+function smoothScrollBy(distance) {
+  window.scrollBy({
+    top: distance,
+    behavior: 'smooth',
+  });
+}

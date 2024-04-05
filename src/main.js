@@ -1,10 +1,8 @@
 import { fetchImages } from './js/pixabay-api.js';
 import { displayImages, showAlert } from './js/render-functions.js';
-
 let searchTerm = '';
 let currentPage = 1;
 let totalHits = 0;
-
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('search-form');
   const searchInput = document.getElementById('search-input');
@@ -12,14 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const loader = document.querySelector('.loader');
   const loadMoreBtn = document.getElementById('load-more-btn');
   const endMessage = document.getElementById('end-message');
+  let lastAddedElement = null;
 
   loader.style.display = 'none';
   loadMoreBtn.style.display = 'none';
-
+  endMessage.style.display = 'none';
   searchInput.addEventListener('input', event => {
     searchTerm = event.target.value.trim();
+    endMessage.style.display = 'none';
+    loadMoreBtn.style.display = 'none';
   });
-
   form.addEventListener('submit', async event => {
     event.preventDefault();
     if (!searchTerm) {
@@ -32,19 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.value = '';
     try {
       loader.style.display = 'block';
-
       const { images, total } = await fetchImages(searchTerm, currentPage);
       totalHits = total;
-
       loader.style.display = 'none';
       if (images.length > 0) {
         displayImages(images, gallery);
-
         if (images.length === 15) {
           loadMoreBtn.style.display = 'block';
         }
       }
-      smoothScrollBy(getCardHeight(gallery) * 2);
     } catch (error) {
       loader.style.display = 'none';
       showAlert('Failed to fetch images');
@@ -55,11 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       currentPage++;
       loader.style.display = 'block';
-
       const { images, total } = await fetchImages(searchTerm, currentPage);
       totalHits = total;
       displayImages(images, gallery);
-
+      lastAddedElement = gallery.lastElementChild;
       loader.style.display = 'none';
       if (
         images.length < 15 ||
@@ -68,24 +63,19 @@ document.addEventListener('DOMContentLoaded', () => {
         loadMoreBtn.style.display = 'none';
         endMessage.style.display = 'block';
       }
-      smoothScrollBy(getCardHeight(gallery) * 2);
+      setTimeout(() => {
+        if (lastAddedElement) {
+          let distance = lastAddedElement.getBoundingClientRect().height * 2;
+
+          window.scrollBy({
+            top: distance,
+            behavior: 'smooth',
+          });
+        }
+      }, 1000);
     } catch (error) {
       loader.style.display = 'none';
       showAlert('Failed to fetch images');
     }
   });
 });
-
-function getCardHeight(gallery) {
-  const card = gallery.querySelector('.card');
-  if (card) {
-    return card.getBoundingClientRect().height;
-  }
-  return 0;
-}
-function smoothScrollBy(distance) {
-  window.scrollBy({
-    top: distance,
-    behavior: 'smooth',
-  });
-}
